@@ -59,7 +59,7 @@ const ProductPage: FC<props> = ({ products }) => {
             <div className="relative w-full">
               <div className="flex justify-center">
                 <Image
-                  src={img}
+                  src={originalProduct?.images[0]?.src}
                   alt="image"
                   className="rounded-md h-80 w-80 object-cover"
                   width={80}
