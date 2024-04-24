@@ -10,13 +10,13 @@ const Navbar = () => {
         <h1 className="font-bold">Logo</h1>
       </Link>
       <div className="flex gap-x-4">
-        <Button className="" variant={"link"}>
+        <Button className=" text-gray-700" variant={"link"}>
           Products
         </Button>
-        <Button className="font-normal" variant={"link"}>
+        <Button className="font-normal text-gray-500" variant={"link"}>
           Home
         </Button>
-        <Button className="font-normal" variant={"link"}>
+        <Button className="font-normal text-gray-500" variant={"link"}>
           Products
         </Button>
         <Avatar className="cursor-pointer">
