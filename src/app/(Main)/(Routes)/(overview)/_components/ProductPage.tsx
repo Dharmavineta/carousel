@@ -47,10 +47,9 @@ type props = {
 };
 
 const ProductPage: FC<props> = ({ products }) => {
-  console.log(products[1].tags);
-  const [product, setProduct] = useState(products[0]);
-  const [img, setImg] = useState(product?.images[0]?.src);
-  console.log(product);
+  const [product, setProduct] = useState(products[0].id);
+  const originalProduct = products.find((prod) => prod.id === product);
+  const [img, setImg] = useState(originalProduct?.images[0]?.src);
 
   return (
     <div className="flex justify-between h-full border-t-[1px]">
@@ -71,7 +70,7 @@ const ProductPage: FC<props> = ({ products }) => {
             <div className="w-full flex gap-x-4 mt-10 justify-center relative">
               <Carousel opts={{ align: "start" }} className="w-[500px] ">
                 <CarouselContent className="-ml-1">
-                  {product.images.map((image: any, i: number) => {
+                  {originalProduct.images.map((image: any, i: number) => {
                     return (
                       <CarouselItem
                         onClick={() => setImg(image.src)}
@@ -102,15 +101,15 @@ const ProductPage: FC<props> = ({ products }) => {
           </div>
         </div>
         <div className="flex-[1] border-l-[1px] pl-3">
-          <h1 className="font-bold ">{product?.name}</h1>
-          {product?.tags.length === 0 && (
+          <h1 className="font-bold ">{originalProduct?.name}</h1>
+          {originalProduct?.tags.length === 0 && (
             <h1 className="text-gray-500 text-sm mt-5 text-center">
               {" "}
               Tags Unavailable
             </h1>
           )}
           <div className="mt-5 grid grid-cols-2 gap-x-2 gap-y-5">
-            {product.tags.map((tag: any, i: number) => (
+            {originalProduct.tags.map((tag: any, i: number) => (
               <div key={tag.id} className="flex gap-x-2">
                 <div className="bg-sky-300 rounded-full w-5 h-5  flex items-center justify-center">
                   <Check className="h-4 w-4" />
@@ -135,22 +134,25 @@ const ProductPage: FC<props> = ({ products }) => {
               orientation="vertical"
             >
               <CarouselContent className="-mt-1 h-[400px]">
-                {products.map((image, i, arr) => (
-                  <CarouselItem
-                    onClick={() => setProduct(image)}
-                    key={image.id}
-                    className="basis-1/2 w-48 h-56"
-                  >
-                    <div className="h-full w-full relative cursor-pointer pl-2">
-                      <Image
-                        src={image.images[0]?.src}
-                        alt="image"
-                        className="rounded-md object-cover"
-                        fill
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
+                {products.map((image, i, arr) => {
+                  console.log(image);
+                  return (
+                    <CarouselItem
+                      onClick={() => setProduct(image.id)}
+                      key={image.id}
+                      className="basis-1/2 w-48 h-56"
+                    >
+                      <div className="h-full w-full relative cursor-pointer pl-2">
+                        <Image
+                          src={image.images[0]?.src}
+                          alt="image"
+                          className="rounded-md object-cover"
+                          fill
+                        />
+                      </div>
+                    </CarouselItem>
+                  );
+                })}
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
