@@ -11,7 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
+import WooCommerceRestApi, {
+  CouponsParams,
+  ProductsMainParams,
+  OrdersMainParams,
+  WooRestApiOptions,
+} from "woocommerce-rest-ts-api";
 
 const productImages = [
   {
@@ -36,8 +42,15 @@ const productImages = [
   },
 ];
 
-const ProductPage = () => {
-  const [image, setImage] = useState(productImages[0].url);
+type props = {
+  products: any[];
+};
+
+const ProductPage: FC<props> = ({ products }) => {
+  console.log(products[1].tags);
+  const [product, setProduct] = useState(products[0]);
+  const [img, setImg] = useState(product?.images[0]?.src);
+  console.log(product);
 
   return (
     <div className="flex justify-between h-full border-t-[1px]">
@@ -47,7 +60,7 @@ const ProductPage = () => {
             <div className="relative w-full">
               <div className="flex justify-center">
                 <Image
-                  src={image}
+                  src={img}
                   alt="image"
                   className="rounded-md h-80 w-80 object-cover"
                   width={80}
@@ -58,27 +71,30 @@ const ProductPage = () => {
             <div className="w-full flex gap-x-4 mt-10 justify-center relative">
               <Carousel opts={{ align: "start" }} className="w-[500px] ">
                 <CarouselContent className="-ml-1">
-                  {productImages.map((image, i, arr) => (
-                    <CarouselItem key={image.id} className="basis-1/4">
-                      <div
-                        onClick={() => setImage(image.url)}
-                        className="w-[100px] h-[100px] relative cursor-pointer pl-2 basis-1"
+                  {product.images.map((image: any, i: number) => {
+                    return (
+                      <CarouselItem
+                        onClick={() => setImg(image.src)}
+                        key={image.id}
+                        className="basis-1/4"
                       >
-                        <Image
-                          src={image.url}
-                          alt="image"
-                          className="rounded-md object-cover"
-                          fill
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
+                        <div className="w-[100px] h-[100px] relative cursor-pointer pl-2 basis-1">
+                          <Image
+                            src={image.src}
+                            alt="image"
+                            className="rounded-md object-cover"
+                            fill
+                          />
+                        </div>
+                      </CarouselItem>
+                    );
+                  })}
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
               </Carousel>
             </div>
-            <div className="mt-8 flex w-full ">
+            <div className="mt-16 flex w-full ">
               <Button size={"sm"} className="w-full">
                 View Product
               </Button>
@@ -86,38 +102,22 @@ const ProductPage = () => {
           </div>
         </div>
         <div className="flex-[1] border-l-[1px] pl-3">
-          <h1 className="font-bold ">Long Sleeve Fleece Sweater</h1>
+          <h1 className="font-bold ">{product?.name}</h1>
+          {product?.tags.length === 0 && (
+            <h1 className="text-gray-500 text-sm mt-5 text-center">
+              {" "}
+              Tags Unavailable
+            </h1>
+          )}
           <div className="mt-5 grid grid-cols-2 gap-x-2 gap-y-5">
-            <div className="flex gap-x-2">
-              <div className="bg-sky-300 rounded-full w-5 h-5  flex items-center justify-center">
-                <Check className="h-4 w-4" />
+            {product.tags.map((tag: any, i: number) => (
+              <div key={tag.id} className="flex gap-x-2">
+                <div className="bg-sky-300 rounded-full w-5 h-5  flex items-center justify-center">
+                  <Check className="h-4 w-4" />
+                </div>
+                <span className="text-sm whitespace-nowrap">{tag?.name}</span>
               </div>
-              <span className="text-sm whitespace-nowrap">Category</span>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="bg-sky-300 rounded-full w-5 h-5  flex items-center justify-center">
-                <Check className="h-4 w-4" />
-              </div>{" "}
-              <span className="text-sm whitespace-nowrap">Long Sleeves</span>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="bg-sky-300 rounded-full w-5 h-5  flex items-center justify-center">
-                <Check className="h-4 w-4" />
-              </div>{" "}
-              <span className="text-sm whitespace-nowrap">Color</span>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="bg-rose-300 rounded-full w-5 h-5  flex items-center justify-center">
-                <X className="h-4 w-4" />
-              </div>{" "}
-              <span className="text-sm whitespace-nowrap">Size</span>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="bg-rose-300 rounded-full w-5 h-5  flex items-center justify-center">
-                <X className="h-4 w-4" />
-              </div>{" "}
-              <span className="text-sm whitespace-nowrap">Category</span>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -135,14 +135,15 @@ const ProductPage = () => {
               orientation="vertical"
             >
               <CarouselContent className="-mt-1 h-[400px]">
-                {productImages.map((image, i, arr) => (
-                  <CarouselItem key={image.id} className="basis-1/2 w-48 h-56">
-                    <div
-                      onClick={() => setImage(image.url)}
-                      className="h-full w-full relative cursor-pointer pl-2"
-                    >
+                {products.map((image, i, arr) => (
+                  <CarouselItem
+                    onClick={() => setProduct(image)}
+                    key={image.id}
+                    className="basis-1/2 w-48 h-56"
+                  >
+                    <div className="h-full w-full relative cursor-pointer pl-2">
                       <Image
-                        src={image.url}
+                        src={image.images[0]?.src}
                         alt="image"
                         className="rounded-md object-cover"
                         fill
