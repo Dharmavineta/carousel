@@ -7,17 +7,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import React, { FC, useState } from "react";
-import WooCommerceRestApi, {
-  CouponsParams,
-  ProductsMainParams,
-  OrdersMainParams,
-  WooRestApiOptions,
-} from "woocommerce-rest-ts-api";
+import ProductRightSlider from "./ProductRightSlider";
 
 const productImages = [
   {
@@ -104,7 +98,6 @@ const ProductPage: FC<props> = ({ products }) => {
           <h1 className="font-bold ">{originalProduct?.name}</h1>
           {originalProduct?.tags.length === 0 && (
             <h1 className="text-gray-500 text-sm mt-5 text-center">
-              {" "}
               Tags Unavailable
             </h1>
           )}
@@ -120,46 +113,11 @@ const ProductPage: FC<props> = ({ products }) => {
           </div>
         </div>
       </div>
-      <div className="flex-[4] py-5 h-full overflow-hidden ">
-        <div className="border-l-[1px] h-full flex flex-col px-5 items-center gap-y-4">
-          <div className="flex flex-col gap-y-2 w-full">
-            <Label htmlFor="search">Search Products</Label>
-            <Input name="search" id="search" placeholder="Search Product..." />
-          </div>
-          <div className="relative flex flex-col gap-y-5 justify-center h-full">
-            <Carousel
-              opts={{
-                align: "start",
-              }}
-              orientation="vertical"
-            >
-              <CarouselContent className="-mt-1 h-[400px]">
-                {products.map((image, i, arr) => {
-                  console.log(image);
-                  return (
-                    <CarouselItem
-                      onClick={() => setProduct(image.id)}
-                      key={image.id}
-                      className="basis-1/2 w-48 h-56"
-                    >
-                      <div className="h-full w-full relative cursor-pointer pl-2">
-                        <Image
-                          src={image.images[0]?.src}
-                          alt="image"
-                          className="rounded-md object-cover"
-                          fill
-                        />
-                      </div>
-                    </CarouselItem>
-                  );
-                })}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </div>
-      </div>
+
+      {/* from here */}
+      <ProductRightSlider products={products} setProduct={setProduct} />
+
+      {/* till here */}
     </div>
   );
 };
