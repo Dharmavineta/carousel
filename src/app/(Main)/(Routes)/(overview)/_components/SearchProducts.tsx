@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 type props = {
   products: any[];
@@ -10,9 +10,26 @@ type props = {
 
 const SearchProducts: FC<props> = ({ products, setProduct }) => {
   const [input, setInput] = useState("");
+  const targetRef = useRef<HTMLDivElement>(null);
   const filteredProducts = input
     ? products.filter((prod) => prod.id.toString().includes(input.toString()))
     : products;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        targetRef.current &&
+        !targetRef.current.contains(event.target as Node)
+      ) {
+        setInput("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-y-2 w-full relative">
@@ -24,7 +41,10 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
         placeholder="Search Product..."
       />
       {input && filteredProducts.length > 0 && (
-        <div className="absolute top-16 w-full bg-white z-10 h-fit flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border">
+        <div
+          ref={targetRef}
+          className="absolute top-16 w-full bg-white z-10 h-fit flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border"
+        >
           {filteredProducts.length > 0 &&
             filteredProducts.map((prod) => (
               <div
