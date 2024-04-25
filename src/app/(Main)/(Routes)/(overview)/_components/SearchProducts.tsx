@@ -12,6 +12,8 @@ type props = {
 const SearchProducts: FC<props> = ({ products, setProduct }) => {
   const [input, setInput] = useState("");
   const targetRef = useRef<HTMLDivElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
   const filteredProducts = input
     ? products.filter((prod) => prod.id.toString().includes(input.toString()))
     : products;
@@ -23,14 +25,37 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
         !targetRef.current.contains(event.target as Node)
       ) {
         setInput("");
+        setSelectedIndex(null);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowDown") {
+        setSelectedIndex((prevIndex) =>
+          prevIndex === null
+            ? 0
+            : Math.min(prevIndex + 1, filteredProducts.length - 1)
+        );
+      } else if (event.key === "ArrowUp") {
+        setSelectedIndex((prevIndex) =>
+          prevIndex === null
+            ? filteredProducts.length - 1
+            : Math.max(prevIndex - 1, 0)
+        );
+      } else if (event.key === "Enter") {
+        if (selectedIndex !== null) {
+          setProduct(filteredProducts[selectedIndex].id);
+          setInput("");
+          setSelectedIndex(null);
+        }
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [filteredProducts, selectedIndex, setProduct]);
 
   return (
     <div className="flex flex-col gap-y-2 w-full relative">
@@ -47,14 +72,15 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
           className="absolute top-16 w-full bg-white z-10 h-fit max-h-[15rem] flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border"
         >
           {filteredProducts.length > 0 &&
-            filteredProducts.map((prod) => {
-              console.log(prod.images[0].src);
+            filteredProducts.map((prod, index, arr) => {
               return (
                 <div
                   onClick={() => {
                     setProduct(prod.id);
                   }}
-                  className="text-3xl hover:bg-gray-50 p-2 flex gap-x-4 cursor-pointer"
+                  className={`text-3xl hover:bg-gray-50 p-2 flex gap-x-4 cursor-pointer ${
+                    selectedIndex === index ? "bg-gray-200" : ""
+                  }`}
                   key={prod.id}
                 >
                   <div className="relative shadow-sm px-2">
