@@ -59,6 +59,10 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
             setProduct(filteredProducts[selectedIndex].id);
             setInput("");
           }
+        } else if (event.key === "Escape") {
+          setInput("");
+          setSelectedIndex(null);
+          setSelectedIndex(0);
         }
       }
     };
