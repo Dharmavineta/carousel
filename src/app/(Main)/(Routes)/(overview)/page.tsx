@@ -12,7 +12,6 @@ const Overview = async () => {
       },
     }
   );
-  console.log(products.data);
   return (
     <div className="h-full">
       <ProductPage products={products.data} />

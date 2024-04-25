@@ -13,6 +13,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
   const [input, setInput] = useState("");
   const targetRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredProducts = input
     ? products.filter((prod) => prod.id.toString().includes(input.toString()))
@@ -29,28 +30,37 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowDown") {
-        setSelectedIndex((prevIndex) =>
-          prevIndex === null
-            ? 0
-            : Math.min(prevIndex + 1, filteredProducts.length - 1)
-        );
-      } else if (event.key === "ArrowUp") {
-        setSelectedIndex((prevIndex) =>
-          prevIndex === null
-            ? filteredProducts.length - 1
-            : Math.max(prevIndex - 1, 0)
-        );
-      } else if (event.key === "Enter") {
-        if (selectedIndex !== null) {
-          setProduct(filteredProducts[selectedIndex].id);
-          setInput("");
-          setSelectedIndex(null);
+      if (inputRef.current === document.activeElement) {
+        console.log("pressed");
+        if (event.key === "ArrowDown") {
+          event.preventDefault(); // Prevent the cursor from moving in the input field
+          setSelectedIndex((prevIndex) =>
+            prevIndex === null || prevIndex === filteredProducts.length - 1
+              ? 0
+              : prevIndex + 1
+          );
+        } else if (event.key === "ArrowUp") {
+          console.log("pressed");
+
+          event.preventDefault(); // Prevent the cursor from moving in the input field
+          setSelectedIndex((prevIndex) =>
+            prevIndex === null || prevIndex === 0
+              ? filteredProducts.length - 1
+              : prevIndex - 1
+          );
+        } else if (event.key === "Enter") {
+          if (selectedIndex !== null) {
+            setProduct(filteredProducts[selectedIndex].id);
+            setInput("");
+            setSelectedIndex(null);
+          }
         }
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
@@ -64,6 +74,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
         onChange={(e) => setInput(e.target.value)}
         name="search"
         id="search"
+        ref={inputRef}
         placeholder="Search Product..."
       />
       {input && filteredProducts.length > 0 && (
