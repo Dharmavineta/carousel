@@ -12,7 +12,7 @@ type props = {
 const SearchProducts: FC<props> = ({ products, setProduct }) => {
   const [input, setInput] = useState("");
   const targetRef = useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredProducts = input
@@ -27,29 +27,37 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       ) {
         setInput("");
         setSelectedIndex(null);
+        setSelectedIndex(0);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (inputRef.current === document.activeElement) {
         if (event.key === "ArrowDown") {
-          event.preventDefault(); // Prevent the cursor from moving in the input field
-          setSelectedIndex((prevIndex) =>
-            prevIndex === null || prevIndex === filteredProducts.length - 1
-              ? 0
-              : prevIndex + 1
-          );
+          event.preventDefault();
+          setSelectedIndex((prevIndex) => {
+            if (prevIndex === null) {
+              return 0;
+            } else if (prevIndex === filteredProducts.length - 1) {
+              return 0;
+            } else {
+              return prevIndex + 1;
+            }
+          });
         } else if (event.key === "ArrowUp") {
-          event.preventDefault(); // Prevent the cursor from moving in the input field
-          setSelectedIndex((prevIndex) =>
-            prevIndex === null || prevIndex === 0
-              ? filteredProducts.length - 1
-              : prevIndex - 1
-          );
+          event.preventDefault();
+          setSelectedIndex((prevIndex) => {
+            if (prevIndex === null) {
+              return filteredProducts.length - 1;
+            } else if (prevIndex === 0) {
+              return filteredProducts.length - 1;
+            } else {
+              return prevIndex - 1;
+            }
+          });
         } else if (event.key === "Enter") {
           if (selectedIndex !== null) {
             setProduct(filteredProducts[selectedIndex].id);
             setInput("");
-            setSelectedIndex(null);
           }
         }
       }
@@ -73,13 +81,18 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
     };
 
     scrollIntoView();
-  }, [selectedIndex]);
+  }, [selectedIndex, filteredProducts.length]);
 
   return (
     <div className="flex flex-col gap-y-2 w-full relative">
       <Label htmlFor="search">Search Products</Label>
       <Input
-        onChange={(e) => setInput(e.target.value)}
+        onChange={(e) => {
+          setInput(e.target.value);
+          if (e.target.value === "") {
+            setSelectedIndex(0);
+          }
+        }}
         name="search"
         id="search"
         ref={inputRef}

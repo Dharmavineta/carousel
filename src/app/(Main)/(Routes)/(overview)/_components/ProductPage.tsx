@@ -12,6 +12,7 @@ import { Check, X } from "lucide-react";
 import Image from "next/image";
 import React, { FC, useState } from "react";
 import ProductRightSlider from "./ProductRightSlider";
+import Link from "next/link";
 
 const productImages = [
   {
@@ -44,6 +45,8 @@ const ProductPage: FC<props> = ({ products }) => {
   const [product, setProduct] = useState(products[0].id);
   const originalProduct = products.find((prod) => prod.id === product);
   const [img, setImg] = useState(originalProduct?.images[0]?.src);
+
+  console.log(products.find((prod) => prod.id === product));
 
   return (
     <div className="flex justify-between h-full border-t-[1px]">
@@ -89,7 +92,12 @@ const ProductPage: FC<props> = ({ products }) => {
             </div>
             <div className="mt-16 flex w-full ">
               <Button size={"sm"} className="w-full">
-                View Product
+                <Link
+                  href={products.find((prod) => prod.id === product)?.permalink}
+                  target="_blank"
+                >
+                  View Product
+                </Link>
               </Button>
             </div>
           </div>
