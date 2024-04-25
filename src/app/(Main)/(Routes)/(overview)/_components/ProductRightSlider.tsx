@@ -19,6 +19,7 @@ type props = {
 };
 const ProductRightSlider: FC<props> = ({ products, setProduct, productId }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
+
   const [productIndex, setProductIndex] = useState<number | null>(null);
   const handleProductSelect = (selectedProduct: any) => {
     const index = products.findIndex((prod) => prod.id === productId);
@@ -26,8 +27,10 @@ const ProductRightSlider: FC<props> = ({ products, setProduct, productId }) => {
   };
 
   useEffect(() => {
-    if (emblaApi && productIndex != null) {
-      emblaApi.scrollTo(productIndex);
+    if (emblaApi) {
+      if (productIndex !== null) {
+        emblaApi.scrollTo(productIndex);
+      }
     }
   }, [emblaApi, productIndex]);
 
