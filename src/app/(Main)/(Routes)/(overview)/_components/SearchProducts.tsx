@@ -31,7 +31,6 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (inputRef.current === document.activeElement) {
-        console.log("pressed");
         if (event.key === "ArrowDown") {
           event.preventDefault(); // Prevent the cursor from moving in the input field
           setSelectedIndex((prevIndex) =>
@@ -40,8 +39,6 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
               : prevIndex + 1
           );
         } else if (event.key === "ArrowUp") {
-          console.log("pressed");
-
           event.preventDefault(); // Prevent the cursor from moving in the input field
           setSelectedIndex((prevIndex) =>
             prevIndex === null || prevIndex === 0
@@ -66,6 +63,17 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [filteredProducts, selectedIndex, setProduct]);
+
+  useEffect(() => {
+    const scrollIntoView = () => {
+      if (targetRef.current && selectedIndex !== null) {
+        const selectedItem = targetRef.current.children[selectedIndex];
+        selectedItem?.scrollIntoView({ block: "nearest" });
+      }
+    };
+
+    scrollIntoView();
+  }, [selectedIndex]);
 
   return (
     <div className="flex flex-col gap-y-2 w-full relative">
