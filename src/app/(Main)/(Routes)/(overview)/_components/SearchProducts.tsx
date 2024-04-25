@@ -43,12 +43,14 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       {input && filteredProducts.length > 0 && (
         <div
           ref={targetRef}
-          className="absolute top-16 w-full bg-white z-10 h-fit flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border"
+          className="absolute top-16 w-full bg-white z-10 h-fit max-h-[15rem] flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border"
         >
           {filteredProducts.length > 0 &&
             filteredProducts.map((prod) => (
               <div
-                onClick={() => setProduct(prod.id)}
+                onClick={() => {
+                  setProduct(prod.id);
+                }}
                 className="text-3xl hover:bg-gray-50 p-2 cursor-pointer"
                 key={prod.id}
               >

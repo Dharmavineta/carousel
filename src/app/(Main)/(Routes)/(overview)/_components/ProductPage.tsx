@@ -115,7 +115,11 @@ const ProductPage: FC<props> = ({ products }) => {
       </div>
 
       {/* from here */}
-      <ProductRightSlider products={products} setProduct={setProduct} />
+      <ProductRightSlider
+        products={products}
+        setProduct={setProduct}
+        productId={product}
+      />
 
       {/* till here */}
     </div>
