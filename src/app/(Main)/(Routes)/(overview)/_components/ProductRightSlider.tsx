@@ -7,10 +7,14 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+import Slider from "react-slick";
+
 import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
 import SearchProducts from "./SearchProducts";
 import useEmblaCarousel from "embla-carousel-react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 type props = {
   products: any[];
@@ -18,6 +22,12 @@ type props = {
   productId: any;
 };
 const ProductRightSlider: FC<props> = ({ products, setProduct, productId }) => {
+  var settings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   const [emblaRef, emblaApi] = useEmblaCarousel();
 
   const [productIndex, setProductIndex] = useState<number | null>(null);
@@ -72,6 +82,36 @@ const ProductRightSlider: FC<props> = ({ products, setProduct, productId }) => {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
+          {/* <Slider {...settings}>
+            <div>
+              <h3>SLIDE 1</h3>
+            </div>
+            <div>
+              <h3>SLIDE 2</h3>
+            </div>
+            <div>
+              <h3>SLIDE 3</h3>
+            </div>
+            {products.map((prod, i, arr) => {
+              return (
+                <div
+                  key={prod.id}
+                  onClick={() => {
+                    handleProductSelect(prod);
+                    setProduct(prod.id);
+                  }}
+                  className="h-full w-full relative cursor-pointer pl-2"
+                >
+                  <Image
+                    src={prod.images[0]?.src}
+                    alt="image"
+                    className="rounded-md object-cover"
+                    fill
+                  />
+                </div>
+              );
+            })}
+          </Slider> */}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 import React, { FC, useEffect, useRef, useState } from "react";
 
 type props = {
@@ -46,17 +47,29 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
           className="absolute top-16 w-full bg-white z-10 h-fit max-h-[15rem] flex flex-col gap-y-4 overflow-y-scroll shadow-md p-3 rounded-md border"
         >
           {filteredProducts.length > 0 &&
-            filteredProducts.map((prod) => (
-              <div
-                onClick={() => {
-                  setProduct(prod.id);
-                }}
-                className="text-3xl hover:bg-gray-50 p-2 cursor-pointer"
-                key={prod.id}
-              >
-                <h1 className="text-sm font-bold">{prod.id}</h1>
-              </div>
-            ))}
+            filteredProducts.map((prod) => {
+              console.log(prod.images[0].src);
+              return (
+                <div
+                  onClick={() => {
+                    setProduct(prod.id);
+                  }}
+                  className="text-3xl hover:bg-gray-50 p-2 flex gap-x-4 cursor-pointer"
+                  key={prod.id}
+                >
+                  <div className="relative shadow-sm px-2">
+                    <Image
+                      src={prod.images[0].src}
+                      alt="image"
+                      height={50}
+                      width={50}
+                      className="rounded-md"
+                    />
+                  </div>
+                  <h1 className="text-sm font-bold">{prod.id}</h1>
+                </div>
+              );
+            })}
         </div>
       )}
     </div>
