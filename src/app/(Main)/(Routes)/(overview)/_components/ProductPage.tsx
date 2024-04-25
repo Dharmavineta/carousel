@@ -90,8 +90,8 @@ const ProductPage: FC<props> = ({ products }) => {
                 <CarouselNext />
               </Carousel>
             </div>
-            <div className="mt-16 flex w-full ">
-              <Button size={"sm"} className="w-full">
+            <div className="mt-16 flex justify-center ">
+              <Button size={"sm"} className="w-[28rem]">
                 <Link
                   href={products.find((prod) => prod.id === product)?.permalink}
                   target="_blank"
