@@ -10,9 +10,10 @@ import {
 
 import { Check, X } from "lucide-react";
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import ProductRightSlider from "./ProductRightSlider";
 import Link from "next/link";
+import { useProductStore } from "@/app/store/store";
 
 const productImages = [
   {
@@ -42,11 +43,10 @@ type props = {
 };
 
 const ProductPage: FC<props> = ({ products }) => {
-  const [product, setProduct] = useState(products[0].id);
-  const originalProduct = products.find((prod) => prod.id === product);
+  const [product, setProduct] = useState(products[0]);
+  const originalProduct = products.find((prod) => prod.id === product.id);
   const [img, setImg] = useState(originalProduct?.images[0]?.src);
-
-  console.log(products.find((prod) => prod.id === product));
+  const productIndex = products.findIndex((prod) => prod.id === product.id);
 
   return (
     <div className="flex justify-between h-full border-t-[1px]">
@@ -92,10 +92,7 @@ const ProductPage: FC<props> = ({ products }) => {
             </div>
             <div className="mt-16 flex justify-center ">
               <Button size={"sm"} className="w-[28rem]">
-                <Link
-                  href={products.find((prod) => prod.id === product)?.permalink}
-                  target="_blank"
-                >
+                <Link href={product?.permalink} target="_blank">
                   View Product
                 </Link>
               </Button>
@@ -127,6 +124,7 @@ const ProductPage: FC<props> = ({ products }) => {
         products={products}
         setProduct={setProduct}
         productId={product}
+        productIndex={productIndex}
       />
 
       {/* till here */}

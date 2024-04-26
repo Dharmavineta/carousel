@@ -6,7 +6,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 
 type props = {
   products: any[];
-  setProduct: (id: string) => void;
+  setProduct: (product: any) => void;
 };
 
 const SearchProducts: FC<props> = ({ products, setProduct }) => {
@@ -56,12 +56,11 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
           });
         } else if (event.key === "Enter") {
           if (selectedIndex !== null) {
-            setProduct(filteredProducts[selectedIndex].id);
+            setProduct(filteredProducts[selectedIndex]);
             setInput("");
           }
         } else if (event.key === "Escape") {
           setInput("");
-          setSelectedIndex(null);
           setSelectedIndex(0);
         }
       }
@@ -99,6 +98,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
         }}
         name="search"
         id="search"
+        value={input}
         ref={inputRef}
         placeholder="Search Product..."
       />
@@ -112,7 +112,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
               return (
                 <div
                   onClick={() => {
-                    setProduct(prod.id);
+                    setProduct(prod);
                   }}
                   className={`text-3xl hover:bg-gray-50 p-2 flex gap-x-4 cursor-pointer ${
                     selectedIndex === index ? "bg-gray-200" : ""
