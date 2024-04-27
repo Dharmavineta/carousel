@@ -10,10 +10,11 @@ import {
 
 import { Check, X } from "lucide-react";
 import Image from "next/image";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import ProductRightSlider from "./ProductRightSlider";
 import Link from "next/link";
 import { useProductStore } from "@/app/store/store";
+import useEmblaCarousel from "embla-carousel-react";
 
 const productImages = [
   {
@@ -38,12 +39,9 @@ const productImages = [
   },
 ];
 
-type props = {
-  products: any[];
-};
-
-const ProductPage: FC<props> = ({ products }) => {
-  const [product, setProduct] = useState(products[0]);
+const ProductPage = () => {
+  const { products, setProduct, product } = useProductStore();
+  const [emblaRef, emblaApi] = useEmblaCarousel();
   const originalProduct = products.find((prod) => prod.id === product.id);
   const [img, setImg] = useState(originalProduct?.images[0]?.src);
   const productIndex = products.findIndex((prod) => prod.id === product.id);
@@ -121,10 +119,8 @@ const ProductPage: FC<props> = ({ products }) => {
 
       {/* from here */}
       <ProductRightSlider
-        products={products}
-        setProduct={setProduct}
-        productId={product}
-        productIndex={productIndex}
+      // productId={product}
+      // productIndex={productIndex}
       />
 
       {/* till here */}

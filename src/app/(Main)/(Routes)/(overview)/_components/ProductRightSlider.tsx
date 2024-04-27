@@ -11,20 +11,16 @@ import Image from "next/image";
 import React, { FC, useEffect, useRef, useState } from "react";
 import SearchProducts from "./SearchProducts";
 import useEmblaCarousel from "embla-carousel-react";
+import { useProductStore } from "@/app/store/store";
 
 type props = {
-  products: any[];
-  setProduct: (product: any) => void;
   productId: any;
   productIndex: number;
 };
-const ProductRightSlider: FC<props> = ({
-  products,
-  setProduct,
-  productId,
-  productIndex,
-}) => {
+const ProductRightSlider = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+
+  const { products, setProduct } = useProductStore();
 
   // const [productIndex, setProductIndex] = useState<number | null>(null);
   // const handleProductSelect = (selectedProduct: any) => {
