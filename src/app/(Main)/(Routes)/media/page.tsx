@@ -22,7 +22,6 @@ const Media = () => {
         {/* carousel */}
         <div className="flex-[2] border-l h-full">
           <ProductRightSlider />
-          Product Slider
         </div>
       </div>
     </div>
