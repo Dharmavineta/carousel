@@ -14,11 +14,11 @@ const ImageEdit = () => {
     inputRef.current?.click();
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const image = event.target.files?.[0];
 
     if (image) {
-      setImg(image);
+      setImg((prev) => prev);
     } else {
       alert("Please input image");
     }
