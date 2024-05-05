@@ -287,7 +287,6 @@ const ImageEdit = () => {
     } catch (error) {
       console.log(error);
     }
-    toast.success("Size chart image deleted successfully");
   };
 
   return (
