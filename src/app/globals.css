@@ -63,3 +63,12 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+.product-overflow::-webkit-scrollbar {
+  display: none;
+}
+
+.product-overflow {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

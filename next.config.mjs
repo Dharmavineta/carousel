@@ -10,6 +10,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "02xz.com",
       },
+      {
+        protocol: "https",
+        hostname: "cf.cjdropshipping.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.alicdn.com",
+      },
     ],
   },
 };

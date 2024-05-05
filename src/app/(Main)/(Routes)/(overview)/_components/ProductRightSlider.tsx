@@ -12,6 +12,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import SearchProducts from "./SearchProducts";
 import useEmblaCarousel from "embla-carousel-react";
 import { useProductStore } from "@/app/store/store";
+import CarouselComponent from "@/components/misc/CarouselComponent";
 
 type props = {
   productId: any;
@@ -20,27 +21,26 @@ type props = {
 const ProductRightSlider = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
 
-  const { products, setProduct } = useProductStore();
+  const { products, setProduct, product } = useProductStore();
 
-  // const [productIndex, setProductIndex] = useState<number | null>(null);
-  // const handleProductSelect = (selectedProduct: any) => {
-  //   const index = products.findIndex((prod) => prod.id === productId);
-  //   setProductIndex(index);
-  // };
-  // useEffect(() => {
-  //   console.log(emblaApi);
-  //   if (emblaApi && productIndex !== null) {
-  //     emblaApi.scrollTo(productIndex);
-  //   }
-  // }, [emblaApi, productIndex]);
+  const index = products.findIndex((prod) => prod.id === product.id);
+  const [productIndex, setProductIndex] = useState<number>(index);
+
+  useEffect(() => {
+    setProductIndex(index);
+  }, [index]);
 
   return (
     <div className="flex-[4] py-5 h-full overflow-hidden ">
       <div className="border-l-[1px] h-full flex flex-col px-5 items-center gap-y-4">
-        <SearchProducts products={products} setProduct={setProduct} />
+        <SearchProducts
+          products={products}
+          setProduct={setProduct}
+          setProductIndex={setProductIndex}
+        />
 
         <div className="relative flex flex-col gap-y-5 justify-center h-full">
-          <Carousel
+          {/* <Carousel
             ref={emblaRef}
             opts={{
               align: "start",
@@ -73,7 +73,12 @@ const ProductRightSlider = () => {
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
-          </Carousel>
+          </Carousel> */}
+          <CarouselComponent
+            direction="vertical"
+            items={products}
+            productIndex={productIndex}
+          />
         </div>
       </div>
     </div>

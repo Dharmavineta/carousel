@@ -7,9 +7,14 @@ import React, { FC, useEffect, useRef, useState } from "react";
 type props = {
   products: any[];
   setProduct: (product: any) => void;
+  setProductIndex: (index: number) => void;
 };
 
-const SearchProducts: FC<props> = ({ products, setProduct }) => {
+const SearchProducts: FC<props> = ({
+  products,
+  setProduct,
+  setProductIndex,
+}) => {
   const [input, setInput] = useState("");
   const targetRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
@@ -27,7 +32,6 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       ) {
         setInput("");
         setSelectedIndex(null);
-        setSelectedIndex(0);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -57,6 +61,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
         } else if (event.key === "Enter") {
           if (selectedIndex !== null) {
             setProduct(filteredProducts[selectedIndex]);
+            setProductIndex(selectedIndex);
             setInput("");
           }
         } else if (event.key === "Escape") {
@@ -73,7 +78,7 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [filteredProducts, selectedIndex, setProduct]);
+  }, [filteredProducts, selectedIndex, setProduct, setProductIndex]);
 
   useEffect(() => {
     const scrollIntoView = () => {
@@ -113,6 +118,9 @@ const SearchProducts: FC<props> = ({ products, setProduct }) => {
                 <div
                   onClick={() => {
                     setProduct(prod);
+                    setProductIndex(
+                      products.findIndex((p) => p?.id === prod?.id)
+                    );
                   }}
                   className={`text-3xl hover:bg-gray-50 p-2 flex gap-x-4 cursor-pointer ${
                     selectedIndex === index ? "bg-gray-200" : ""

@@ -7,7 +7,6 @@ import { useProductStore } from "@/app/store/store";
 
 const Media = () => {
   const { product, products, setProduct, setProducts } = useProductStore();
-  console.log(product);
   if (products.length === 0) {
     return (
       <div className=" h-screen flex items-center justify-center">

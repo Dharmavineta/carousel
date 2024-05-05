@@ -15,6 +15,8 @@ import ProductRightSlider from "./ProductRightSlider";
 import Link from "next/link";
 import { useProductStore } from "@/app/store/store";
 import useEmblaCarousel from "embla-carousel-react";
+import CustomCarousel from "@/components/misc/CarouselComponent";
+import CarouselComponent from "@/components/misc/CarouselComponent";
 
 const productImages = [
   {
