@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import React, { FC, useEffect, useRef, useState } from "react";
-import { CustomScroll } from "react-custom-scroll";
 import "../../app/globals.css";
 
 type props = {
@@ -18,9 +17,6 @@ const CarouselComponent: FC<props> = ({ direction, items, productIndex }) => {
   const [activeItem, setActiveItem] = useState();
   const carouselRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  console.log(productIndex);
-  console.log(currentIndex);
 
   const { setProduct } = useProductStore();
 
