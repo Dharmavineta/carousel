@@ -18,6 +18,11 @@ const SizeChartPage = () => {
         </div>
         <div className="flex-[5] border-l shadow-sm">
           <div className="h-full w-full relative">
+            {!size_chart_image && (
+              <div className="flex items-center justify-center h-full w-full">
+                No Image Uploaded
+              </div>
+            )}
             <Image
               className="object-contain"
               src={size_chart_image?.value}
