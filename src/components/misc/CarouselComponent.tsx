@@ -42,8 +42,9 @@ const CarouselComponent: FC<props> = ({ direction, items, productIndex }) => {
   }, [currentIndex]);
 
   useEffect(() => {
-    if (itemRefs.current[productIndex]) {
-      itemRefs.current[productIndex].scrollIntoView({
+    const currentItem = itemRefs.current[productIndex];
+    if (currentItem !== null && currentItem !== undefined) {
+      currentItem.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
